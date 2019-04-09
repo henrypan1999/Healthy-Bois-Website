@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Centre Information</span>
+            <table class="striped">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{centre.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>{{centre.centretype}}</td>
+                    </tr>
+                    <tr>
+                        <td>Suburb</td>
+                        <td>{{centre.suburb}}</td>
+                    </tr>
+                    <tr>
+                        <td>Average Rating</td>
+                        <td>{{centre.average_rating}}</td>
+                        <!--<td>{% for rate in centre.ratings %} {{rate.patient}} {% endfor %}{{centre.ratings}}</td>-->
+                    </tr>
+                    <tr>
+                        <td>Phone Number</td>
+                        <td>{{centre.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>ABN</td>
+                        <td>{{centre.abn}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="col"><span class="card-title">Rate this Centre</span></div>
+            <form action="{{url_for('centre_profile', centrename=centrename)}}" method="POST">
+                <div class="col s6">
+                    <p class="range-field">
+                        <input type="range" name="rating" min="1" max="5" />
+                    </p>
+                </div>
+                <div class="col">
+                    <button class="btn waves-effect waves-light" type="submit">
+                        Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Centre Blurb</span>
+            <p>{{centre.blurb}}</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Providers</span>
+            <table>
+                <thead>
+                    <col width="120px">
+                    <th class="center-align">Book</th>
+                    <th>Name</th>
+                    <th>Profession</th>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                    <tr>
+                        <td class="center-align"><a href="{{url_for('book_appointment', centre=centre.name, provider=provider.get_id())}}" class="waves-effect waves-light btn-small">Book</a></td>
+                        <td><a href="{{url_for('provider_profile', uid=provider.get_id())}}">{{provider.name|title}}</a></td>
+                        <td>{{provider.profession}}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

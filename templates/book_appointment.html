@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<!-- I hate Materialize already -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var options = {
+            autoClose: true,
+            format: 'yyyy-mm-dd',
+            minDate: new Date()
+        }
+        M.Datepicker.init(document.querySelectorAll('.datepicker'), options);
+    });
+</script>
+
+<br>
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Select a Date</span>
+                <p>Making an appointment with {{provider.profession}}, Dr. {{provider.name|title}} at {{centre.name}}.</p>
+                <div class="input-field">
+                    <form action="{{url_for('book_appointment', provider=provider.get_id(), centre=centre.name)}}" method="GET">
+                        <input type="text" class="datepicker black-text" placeholder="Date" name="date" value="{{date}}">
+                        <button class="btn waves-effect waves-light" type="submit">
+                            Display Available Times
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </form>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if times %}
+<form action="{{url_for('book_appointment', provider=provider.get_id(), centre=centre.name) + '?date='}}{{date}}" method="POST">
+    <div class="row">
+        <div class="col s12 input-field">
+            <form>
+                <div class="card">
+                    <div class="card-content">
+                        <label>(Optional) Note to Provider</label>
+                        <textarea name="note" class="black-text materialize-textarea">{{note}}</textarea>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Select a Time</span>
+                    <p>Displaying available times for {{date}}.</p>
+                    <br>
+                    <table class="striped">
+                        <tbody>
+                            {% for time in times %}
+                            <tr>
+                                <td>{{time}}</td>
+                                <td>
+                                    <div class="input-field">
+                                        <button name="time" value="{{time}}" class="btn waves-effect waves-light" type="submit">
+                                            Book
+                                            <i class="material-icons right">send</i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endif %}
+
+{% endblock %}

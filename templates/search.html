@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<!-- I hate Materialize already -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var options = document.querySelectorAll('option');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
+
+<br>
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Search for Providers or Centres</span>
+        <br>
+        <form action="{{url_for('search')}}" method="POST">
+            <div class="row">
+                <div class="input-field col s4">
+                    <select name="search_type">
+                        <option value="name" {% if prev_type=="name" %}selected{% endif %}>By centre's name</option>
+                        <option value="suburb" {% if prev_type=="suburb" %}selected{% endif %}>By centre's suburb</option>
+                        <option value="service" {% if prev_type=="service" %}selected{% endif %}>By provider's profession</option>
+                        <option value="provider" {% if prev_type=="provider" %}selected{% endif %}>By provider's name</option>
+                    </select>
+                    <label>Search Category</label>
+                </div>
+                <div class="input-field col s8">
+                    <input class="grey-text text-darken-3" name="query" value="{{query}}" placeholder="Leave empty to list all" id="query" type="text">
+                    <label for="query">Filter</label>
+                </div>
+            </div>
+
+            <div class="row right-align">
+                <button class="btn waves-effect waves-light" type="submit">
+                    search
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% if results is defined %}
+<div class="card">
+    <div class="card-content">
+        {% if results_kind == "HP" %}
+        <span class="card-title">Providers Found:</span>
+        {% else %}
+        <span class="card-title">Centres Found:</span>
+        {% endif %}
+        <br>
+        <table class="striped" style="width:100%">
+            <thead>
+                <col width="120px">
+                {% if results_kind == "HP" %}
+                <col width="30%">
+                <th class="center-align">More</th>
+                <th>Profession</th>
+                <th>Name</th>
+                <th>Average Rating</th>
+                {% else %}
+                <th class="center-align">More</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Suburb</th>
+                <th>Phone Number</th>
+                <th>Average Rating</th>
+                {% endif %}
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    {% if results_kind == "HP" %}
+                    <td class="center-align"><a href="{{url_for('provider_profile', uid=result.get_id())}}" class="waves-effect waves-light btn-small">Details</a></td>
+                    <td>{{result.profession}}</td>
+                    <td>{{result.name|title}}</td>
+                    <td>{{result.average_rating}}</td>
+                    {% else %}
+                    <td class="center-align"><a href="{{url_for('centre_profile', centrename=result.name)}}" class="waves-effect waves-light btn-small">Details</a></td>
+                    <td>{{result.centretype}}</td>
+                    <td>{{result.name}}</td>
+                    <td>{{result.suburb}}</td>
+                    <td>{{result.phone}}</td>
+                    <td>{{result.average_rating}}</td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <span class="red-text">No results, please try another search.</span>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

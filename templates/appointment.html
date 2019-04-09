@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Booking Information</span>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>Location</td>
+                    <td>{{booking.HC.name}}</td>
+                </tr>
+                <tr>
+                    <td>Time</td>
+                    <td>{{booking.fmt_time}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <span class="card-title">Patient's Note</span>
+        <div class="divider"></div>
+        <blockquote>
+            {% for line in booking.note_newline_delimited %}
+            <p>{{line}}</p>
+            {% endfor %}
+        </blockquote>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Patient Information</span>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>{{patient.name|title}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{patient.username}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Take Notes</span>
+        <form action="{{url_for('appointment_info', bid=booking.ID)}}" method="POST">
+            <div class="input-field">
+                <div class="input-field">
+                    <textarea name="note" class="black-text materialize-textarea">{{note}}</textarea>
+                    <label>Note</label>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <textarea name="medication" class="black-text materialize-textarea">{{medication}}</textarea>
+                <label>Medication</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit">
+                Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if patient.notes %}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Past Notes</span>
+        <ul class="collection">
+            {% for note in patient.notes %}
+            <li class="collection-item">
+                <h5>{{note.fmt_datetime}}</h5>
+                <span>Written by {{note.provider.name|title}} ({{note.provider.username}})</span>
+                <div class="card-content">
+                    <table>
+                        <th>
+                            Notes
+                        </th>
+                        <th>
+                            Medication
+                        </th>
+                        <tbody>
+                            <td>
+                                {% for line in note.note_newline_delimited %}
+                                <p>{{line}}</p>
+                                {% endfor %}
+                            </td>
+
+                            <td>
+                                {% for line in note.medication_newline_delimited %}
+                                <p>{{line}}</p>
+                                {% endfor %}
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<br>
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Provider Information</span>
+            <table class="striped">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{provider.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Profession</td>
+                        <td>{{provider.profession}}</td>
+                    </tr>
+                    <tr>
+                        <td>Average Rating</td>
+                        <td>{{provider.average_rating}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{provider.username}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="col"><span class="card-title">Rate this Provider</span></div>
+            <form action="{{url_for('provider_profile', uid=uid)}}" method="POST">
+                <div class="col s6">
+                    <p class="range-field">
+                        <input type="range" name="rating" min="1" max="5" />
+                    </p>
+                </div>
+                <div class="col">
+                    <button class="btn waves-effect waves-light" type="submit">
+                        Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Workplaces</span>
+            <table>
+                <col width="120px">
+                <thead>
+                    <th class="center-align">Book</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Suburb</th>
+                </thead>
+                <tbody>
+                    {% for workplace in workplaces %}
+                    <tr>
+                        <td class="center-align"><a href="{{url_for('book_appointment', centre=workplace.name, provider=provider.get_id())}}" class="waves-effect waves-light btn-small">Book</a></td>
+                        <td><a href="{{url_for('centre_profile', centrename=workplace.name)}}">{{workplace.name}}</a></td>
+                        <td>{{workplace.centretype}}</td>
+                        <td>{{workplace.suburb}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

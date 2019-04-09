@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+<div class="card">
+    <div class="card-content">
+        {% if history %}
+        <span class="card-title">Previous Appointments</span>
+        {% else %}
+        <span class="card-title">Upcoming Appointments</span>
+        {% endif %}
+        <table class="striped">
+            <thead>
+                <tr>
+                    <!-- patients and providers have different headers -->
+                    {% if current_user.is_patient %}
+                    <th>Centre</th>
+                    <th>Provider's Name</th>
+                    <th>Time</th>
+                    {% else %}
+                    <th>Centre</th>
+                    <th>Patient's Name</th>
+                    <th>Time</th>
+                    <th class="center-align">Details</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    {% if current_user.is_patient %}
+                    <td><a href="{{url_for('centre_profile', centrename=appointment.HC.name)}}">{{appointment.HC.name|title}}</a></td>
+                    <td><a href="{{url_for('provider_profile', uid=appointment.HP.get_id())}}">{{appointment.HP.name}}</a></td>
+                    <td>{{appointment.fmt_time}}</td>
+                    {% else %}
+                    <td>{{appointment.HC.name}}</td>
+                    <td>{{appointment.user.name|title}}</td>
+                    <td>{{appointment.fmt_time}}</td>
+                    <td class="center-align"><a href="{{url_for('appointment_info', bid=appointment.ID)}}" class="waves-effect waves-light btn-small">Info</a></td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <span class="red-text">No results.</span>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

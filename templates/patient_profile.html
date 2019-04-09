@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Patient Information</span>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>{{patient.name}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{patient.username}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Take Notes</span>
+        <form action="{{url_for('patient_profile', uid=patient.get_id())}}" method="POST">
+            <div class="row">
+                <div class="col s6 card">
+                    <div class="input-field">
+                        <div class="input-field">
+                            <textarea name="note" class="black-text materialize-textarea"></textarea>
+                            <label>Note</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s6 card">
+                    <div class="input-field">
+                        <textarea name="medication" class="black-text materialize-textarea"></textarea>
+                        <label>Medication</label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit">
+                Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if notes %}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Past Notes</span>
+        {% for note in notes %}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{note.datetime}}</span>
+                <span>Written by {{note.provider.name}} ({{note.provider.username}}),</span>
+                <div class="card-content">
+                    <table>
+                        <th>
+                            Notes
+                        </th>
+                        <th>
+                            Medication
+                        </th>
+                        <tbody>
+                            <td>
+                                <p>{{note.note}}</p>
+                            </td>
+
+                            <td>
+                                <p>{{note.medication}}</p>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

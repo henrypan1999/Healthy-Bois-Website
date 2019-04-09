@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Health Care System</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{url_for('serve_css')}}" media="screen,projection">
+    <!-- Custom CSS -->
+    <link type="text/css" rel="stylesheet" href="{{url_for('serve_custom_css')}}">
+</head>
+
+<body>
+    <nav class="teal">
+        <div class="container nav-wrapper">
+            <a href="#" class="brand-logo right">Healthy bois</a>
+            {% if current_user.is_authenticated %}
+            <ul class="left">
+                {% if current_user.is_patient %}
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('appointments') }}">Upcoming</a></li>
+                <li><a href="{{ url_for('history') }}">History</a></li>
+                <li><a href="{{ url_for('search') }}">Search</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% elif current_user.is_provider %}
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('appointments') }}">Upcoming</a></li>
+                <li><a href="{{ url_for('history') }}">History</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+    <br>
+    <!-- Main Content Section -->
+    <main>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <br>
+        <div class="container row">
+            <div class="col s6 offset-s3">
+                <div class="z-depth-3">
+                    <ul>
+                        <br>
+                        {% for message in messages %}
+                        <li class="center-align">{{message}}</li>
+                        {% endfor %}
+                        <br>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+    <script type="text/javascript" src="{{url_for('serve_js')}}"></script>
+</body>
+
+<footer class="page-footer teal">
+    {% if not current_user.is_anonymous %}
+    <div class="container">Logged in as {{current_user.name}}.</div>
+    {% endif %}
+    <div class="footer-copyright">
+        <div class="container">
+            © 2018 plzno
+        </div>
+    </div>
+</footer>
+
+</html>
