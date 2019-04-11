@@ -11,6 +11,7 @@ Windows:
 pip install virtualenv
 python -m virtualenv env
 pip install -r requirements.txt
+.\env\Scripts\activate
 set FLASK_APP=app.py
 set FLASK_DEBUG=true #developer
 flask run
