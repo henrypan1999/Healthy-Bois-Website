@@ -1,0 +1,7 @@
+provider,note,medication,time,patient
+thomas,Note 1,Test,2018-10-14 15:25:22,jack
+thomas,Note 2,,2018-10-14 15:56:25,jack
+thomas,Note 3,,2018-10-14 15:58:56,jack
+thomas,Note 4,,2018-10-14 15:59:38,jack
+thomas,Note 5,,2018-10-14 16:02:57,jack
+thomas,"Note with wierd characters ,"""",#$!@#!",,2018-10-14 16:05:18,jack
